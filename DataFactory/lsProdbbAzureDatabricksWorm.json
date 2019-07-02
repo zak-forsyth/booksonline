@@ -1,0 +1,14 @@
+{
+    "name": "lsProdbbAzureDatabricksWorm",
+    "properties": {
+        "type": "AzureDatabricks",
+        "typeProperties": {
+            "domain": "https://northeurope.azuredatabricks.net",
+            "existingClusterId": "#{AzureDatabricksClusterWorm}",
+            "accessToken": {
+                "type": "SecureString",
+                "value": ""
+			}
+        }
+    }
+}

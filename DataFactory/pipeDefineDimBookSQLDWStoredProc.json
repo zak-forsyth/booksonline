@@ -1,0 +1,37 @@
+{
+  "name": "pipeDefineDimBookSQLDWStoredProc",
+  "properties": {
+    "activities": [
+      {
+        "name": "1_Define_DimBook",
+        "policy": {
+          "timeout": "00:20:00"
+        },
+        "type": "SqlServerStoredProcedure",
+        "typeProperties": {
+          "storedProcedureName": "[labsdim].[LoadAndDefineBookDimension]",
+          "storedProcedureParameters": {
+            "dEnd": {              
+              "value": "@formatDateTime(pipeline().parameters.WindowEnd, 'yyyy-MM-dd HH:mm:ss')"
+            },
+            "dStart": {              
+              "value": "@formatDateTime(pipeline().parameters.WindowStart, 'yyyy-MM-dd HH:mm:ss')"
+            }
+          }
+        },
+		"linkedServiceName": {
+			"referenceName": "lsProdbbSQLDW",
+			"type": "LinkedServiceReference"
+		}
+      }
+    ],
+    "parameters": {
+      "WindowEnd": {
+        "type": "String"
+      },
+      "WindowStart": {
+        "type": "String"
+      }
+    }
+  }
+}

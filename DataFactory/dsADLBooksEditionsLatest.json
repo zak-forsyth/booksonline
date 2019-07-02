@@ -1,0 +1,99 @@
+{
+  "name": "dsADLBooksEditionsLatest",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "lsProdbbAzureDataLakeStore",
+      "type": "LinkedServiceReference"
+    },
+    "structure": [
+      {
+        "name": "Id",
+        "type": "Int32"
+      },
+      {
+        "name": "Title",
+        "type": "String"
+      },
+      {
+        "name": "Isbn",
+        "type": "String"
+      },
+      {
+        "name": "Cover",
+        "type": "String"
+      },
+      {
+        "name": "Publisher",
+        "type": "String"
+      },
+      {
+        "name": "PublishDate",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "Language",
+        "type": "Int32"
+      },
+      {
+        "name": "CreatedAt",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "ModifiedAt",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "DeletedAt",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "Book_Id",
+        "type": "Int32"
+      },
+      {
+        "name": "ContentType",
+        "type": "Int32"
+      },
+      {
+        "name": "Pages",
+        "type": "Int64"
+      },
+      {
+        "name": "Duration",
+        "type": "Int64"
+      },
+      {
+        "name": "BookBeatPublishDate",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "BookBeatViewDate",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "BookBeatUnpublishDate",
+        "type": "DateTimeOffset"
+      },
+      {
+        "name": "SerializedApprovals",
+        "type": "String"
+      },
+      {
+        "name": "SerializedMarketRights",
+        "type": "String"
+      },
+      {
+        "name": "SerializedCopyrightOwners",
+        "type": "String"
+      }
+    ],
+    "type": "AzureDataLakeStoreFile",
+    "typeProperties": {
+      "fileName": "BooksEditions-DailySnapshot-Latest.orc",
+      "folderPath": "BackEnd/Books/Editions/Latest/",
+      "format": {
+        "type": "OrcFormat"
+      }
+    }
+  }
+}

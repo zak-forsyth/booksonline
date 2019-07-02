@@ -1,0 +1,17 @@
+{
+	"name": "lsProdbbAzureDataLakeStore",
+	"properties": {
+		"type": "AzureDataLakeStore",
+		"typeProperties": {
+			"dataLakeStoreUri": "https://devbbdatalakestore.azuredatalakestore.net/webhdfs/v1",
+			"servicePrincipalId": "",
+			"servicePrincipalKey": {
+				"type": "SecureString",
+				"value": ""
+			},
+			"tenant": "",
+			"subscriptionId": "",
+			"resourceGroupName": ""
+		}
+	}
+}

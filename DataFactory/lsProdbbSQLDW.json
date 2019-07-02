@@ -1,0 +1,9 @@
+{
+  "name": "lsProdbbSQLDW",
+  "properties": {
+    "type": "AzureSqlDW",
+    "typeProperties": {
+      "connectionString": "Data Source=test-bb-dwh.database.windows.net;Initial Catalog=test-bb-DWH;Integrated Security=False;User ID=user;Password=password;Connect Timeout=30;Encrypt=True"
+    }
+  }
+}

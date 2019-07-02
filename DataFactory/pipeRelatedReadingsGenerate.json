@@ -1,0 +1,189 @@
+{
+    "name": "pipeRelatedReadingsGenerate",
+    "properties": {
+        "activities": [
+            {
+                "name": "1-ControlExternalExport",
+                "type": "Copy",
+                "policy": {
+                    "timeout": "0.00:15:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "source": {
+                        "type": "SqlDWSource",
+                        "sqlReaderStoredProcedureName": "[labsinternal].[ControlExternalExport]",
+                        "storedProcedureParameters": {
+                            "dEnd": {
+                                "type": "DateTime",
+                                "value": {
+                                    "value": "@formatDateTime(pipeline().parameters.WindowStart, 'yyyy-MM-dd HH:mm:ss')",
+                                    "type": "Expression"
+                                }
+                            },
+                            "dStart": {
+                                "type": "DateTime",
+                                "value": {
+                                    "value": "@formatDateTime(pipeline().parameters.WindowStart, 'yyyy-MM-dd HH:mm:ss')",
+                                    "type": "Expression"
+                                }
+                            },
+                            "ExternalExport": {
+                                "type": "String",
+                                "value": {
+                                    "value": "@pipeline().parameters.ExternalExport",
+                                    "type": "Expression"
+                                }
+                            },
+                            "Force": {
+                                "type": "Boolean",
+                                "value": {
+                                    "value": "@pipeline().parameters.Force",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    },
+                    "sink": {
+                        "type": "BlobSink"
+                    },
+                    "enableStaging": false,
+                    "dataIntegrationUnits": 0
+                },
+                "inputs": [
+                    {
+                        "referenceName": "dsSQLDWspOutputControlExternalExport",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "dsASBlobSlackMessage",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "ExternalExport": {
+                                "value": "@pipeline().parameters.ExternalExport",
+                                "type": "Expression"
+                            },
+                            "WindowStart": {
+                                "value": "@pipeline().parameters.WindowStart",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "2-If-NoErrors-Export",
+                "type": "IfCondition",
+                "dependsOn": [
+                    {
+                        "activity": "1-ControlExternalExport",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "expression": {
+                        "value": "@equals(activity('1-ControlExternalExport').output.rowsCopied,0)",
+                        "type": "Expression"
+                    },
+                    "ifTrueActivities": [
+                        {
+                            "name": "2-RelatedReadings",
+                            "type": "DatabricksNotebook",
+                            "policy": {
+                                "timeout": "0.00:30:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 600,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "typeProperties": {
+                                "notebookPath": "/AutomaticLists/RelatedReadingsPy"
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "lsProdbbAzureDatabricksWorm",
+                                "type": "LinkedServiceReference"
+                            }
+                        },
+                        {
+                            "name": "3_LogExternalExport",
+                            "type": "SqlServerStoredProcedure",
+                            "dependsOn": [
+                                {
+                                    "activity": "2-RelatedReadings",
+                                    "dependencyConditions": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            ],
+                            "policy": {
+                                "timeout": "0.00:05:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 300,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "typeProperties": {
+                                "storedProcedureName": "[labsinternal].[LogExternalExport]",
+                                "storedProcedureParameters": {
+                                    "dEnd": {
+                                        "value": {
+                                            "value": "@formatDateTime(pipeline().parameters.WindowStart, 'yyyy-MM-dd HH:mm:ss')",
+                                            "type": "Expression"
+                                        },
+                                        "type": "DateTime"
+                                    },
+                                    "dStart": {
+                                        "value": {
+                                            "value": "@formatDateTime(pipeline().parameters.WindowStart, 'yyyy-MM-dd HH:mm:ss')",
+                                            "type": "Expression"
+                                        },
+                                        "type": "DateTime"
+                                    },
+                                    "ExternalExport": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ExternalExport",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "RowsCopied": {
+                                        "value": {
+                                            "value": "-1",
+                                            "type": "Expression"
+                                        },
+                                        "type": "Int32"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "lsProdbbSQLDW",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "ExternalExport": {
+                "type": "String",
+                "defaultValue": "ExportRelatedReadings"
+            },
+            "WindowStart": {
+                "type": "String"
+            },
+            "Force": {
+                "type": "Bool",
+                "defaultValue": false
+            }
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

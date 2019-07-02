@@ -1,0 +1,135 @@
+{
+  "name": "pipeBooksEditionsSQLToSQLDWViaADL",
+  "properties": {
+    "activities": [
+      {
+        "inputs": [
+          {            
+            "referenceName": "dsSQLBBBooksEditions",
+            "type": "DatasetReference"
+          }
+        ],
+        "name": "1_BooksEditions_From_SQLBB_To_ADL",
+        "outputs": [
+          {
+            "referenceName": "dsADLBooksEditions",
+            "type": "DatasetReference",
+			"parameters": {
+              "WindowStart": {
+                "type": "Expression",
+                "value": "@pipeline().parameters.WindowStart"
+              }
+            }
+          }
+        ],
+        "policy": {
+          "retry": 2,
+          "retryIntervalInSeconds": 600,
+          "timeout": "00:20:00"
+        },
+        "type": "Copy",
+        "typeProperties": {
+          "sink": {
+            "type": "AzureDataLakeStoreSink",
+            "writeBatchSize": 0,
+            "writeBatchTimeout": "00:00:00"
+          },
+          "source": {
+            "sqlReaderQuery": "select Id, Title, Isbn, Description, Cover, Publisher, [PublishDate], [Language], CreatedAt, ModifiedAt, [DeletedAt], Book_Id, ContentType, Pages, Duration, [BookBeatPublishDate], [BookBeatViewDate], [BookBeatUnpublishDate], [ShortDescription], SerializedApprovals, SerializedMarketRights, SerializedCopyrightOwners from [dbo].[Editions]",
+            "type": "SqlSource"
+          }
+        }
+      },
+      {
+        "dependsOn": [
+          {
+            "activity": "1_BooksEditions_From_SQLBB_To_ADL",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "inputs": [
+          {
+            "referenceName": "dsADLBooksEditions",
+            "type": "DatasetReference",
+			"parameters": {
+              "WindowStart": {
+                "type": "Expression",
+                "value": "@pipeline().parameters.WindowStart"
+              }
+            }
+          }
+        ],
+        "name": "2_BooksEditions_From_ADL_To_ADLLatest",
+        "outputs": [
+          {
+            "referenceName": "dsADLBooksEditionsLatest",
+            "type": "DatasetReference"
+          }
+        ],
+        "policy": {
+          "retry": 2,
+          "retryIntervalInSeconds": 600,
+          "timeout": "00:20:00"
+        },
+        "type": "Copy",
+        "typeProperties": {
+          "sink": {
+            "type": "AzureDataLakeStoreSink",
+            "writeBatchSize": 0,
+            "writeBatchTimeout": "00:00:00"
+          },
+          "source": {
+            "recursive": false,
+            "type": "AzureDataLakeStoreSource"
+          },
+          "translator": {
+            "columnMappings": "Id:Id, Title:Title, Isbn:Isbn, Cover:Cover, Publisher:Publisher, PublishDate:PublishDate, Language:Language, CreatedAt:CreatedAt, ModifiedAt:ModifiedAt, DeletedAt:DeletedAt, Book_Id:Book_Id, ContentType:ContentType, Pages:Pages, Duration:Duration, BookBeatPublishDate:BookBeatPublishDate, BookBeatViewDate:BookBeatViewDate, BookBeatUnpublishDate:BookBeatUnpublishDate, SerializedApprovals:SerializedApprovals, SerializedMarketRights:SerializedMarketRights, SerializedCopyrightOwners:SerializedCopyrightOwners",
+            "type": "TabularTranslator"
+          }
+        }
+      },
+      {
+        "dependsOn": [
+          {
+            "activity": "2_BooksEditions_From_ADL_To_ADLLatest",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "name": "3_BooksEditions_From_Stg_To_Hist",
+        "policy": {
+          "retry": 2,
+          "retryIntervalInSeconds": 600,
+          "timeout": "00:20:00"
+        },
+        "type": "SqlServerStoredProcedure",
+        "typeProperties": {
+			"storedProcedureName": "[labshist].[HandleHistoryBooksEditions]",
+			"storedProcedureParameters": {
+				"SliceEnd": {              
+					"value": "@formatDateTime(pipeline().parameters.WindowEnd, 'yyyy-MM-dd HH:mm:ss')"
+				},
+				"SliceStart": {              
+					"value": "@formatDateTime(pipeline().parameters.WindowStart, 'yyyy-MM-dd HH:mm:ss')"
+				}
+			}	
+        },
+		"linkedServiceName": {
+			"referenceName": "lsProdbbSQLDW",
+			"type": "LinkedServiceReference"
+		}
+      }
+    ],
+    "parameters": {
+      "WindowEnd": {
+        "type": "String"
+      },
+      "WindowStart": {
+        "type": "String"
+      }
+    }
+  }
+}

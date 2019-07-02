@@ -1,0 +1,819 @@
+{
+    "name": "pipeZZZZDailyMaster",
+    "properties": {
+        "activities": [
+            {
+                "name": "102-pipeZZZAccountsMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZAccountsMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "103-pipeZZZAccountsWithDelayMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZAccountsWithDelayMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "104-pipeZZZGiftCardsMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "102-pipeZZZAccountsMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZGiftCardsMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "105-pipeZZZBooksMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZBooksMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "106-pipeZZZDistributionMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZDistributionMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "107-pipeZZZReadingsDailyMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "114-pipeZZZOrganizationsMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZReadingsDailyMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "108-pipeZZZSettlementsMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZSettlementsMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "109-pipeZZZUsersMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZUsersMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "110-pipeZZZPricingMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZPricingMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "201-pipeZZZCategoriesMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "105-pipeZZZBooksMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZCategoriesMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "112-pipeZZZAppViewsMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZAppViewsMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "113-pipeZZZListsMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "101-pipeZZZMailchimpMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZListsMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "101-pipeZZZMailchimpMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZMailchimpMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "114-pipeZZZOrganizationsMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZOrganizationsMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "202-pipeZZZRevenueMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "103-pipeZZZAccountsWithDelayMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "104-pipeZZZGiftCardsMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZRevenueMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "402-pipeZZZUsageConsumptionMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "301-pipeZZZInternalMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZUsageConsumptionMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "501-pipeZZZUserSnapshotMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "402-pipeZZZUsageConsumptionMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZUserSnapshotMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "601-pipeDefineAppTables",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "501-pipeZZZUserSnapshotMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeDefineAppTablesSQLDWStoredProc",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "301-pipeZZZInternalMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "201-pipeZZZCategoriesMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "110-pipeZZZPricingMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "108-pipeZZZSettlementsMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "107-pipeZZZReadingsDailyMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "106-pipeZZZDistributionMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "109-pipeZZZUsersMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "104-pipeZZZGiftCardsMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "103-pipeZZZAccountsWithDelayMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "116-pipeZZZEventLogDailyMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "111-pipeZZZManualMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "112-pipeZZZMetadataMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZInternalMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "115-pipeBooksPopularityRank",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksPopularityRankSQLDWToASBlob",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "401-pipeMailchimpUpload",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "301-pipeZZZInternalMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeMailchimpUploadDatabricks",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true
+                }
+            },
+            {
+                "name": "116-pipeZZZEventLogDailyMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "102-pipeZZZAccountsMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZEventLogDailyMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "801-pipeAutomaticListsGenerate",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "702-pipeModelRefreshers",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeAutomaticListsGenerate",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "ExternalExport": "ExportAutomaticLists",
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "Force": "false"
+                    }
+                }
+            },
+            {
+                "name": "701-pipeZZZEditionDailySnapshotMaster",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "601-pipeDefineAppTables",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZEditionDailySnapshotMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "111-pipeZZZManualMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZManualMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "999-pipeDataQualityTests",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "202-pipeZZZRevenueMaster",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "401-pipeMailchimpUpload",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "801-pipeAutomaticListsGenerate",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "113-pipeZZZListsMaster",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "112-pipeZZZAppViewsMaster",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    },
+                    {
+                        "activity": "115-pipeBooksPopularityRank",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeDataQualityControls",
+                        "type": "PipelineReference"
+                    },
+                    "parameters": {
+                        "PipelineName": {
+                            "value": "@pipeline().Pipeline",
+                            "type": "Expression"
+                        },
+                        "PipelineRunID": {
+                            "value": "@pipeline().RunId",
+                            "type": "Expression"
+                        },
+                        "PipelineTriggerType": {
+                            "value": "@pipeline().TriggerType",
+                            "type": "Expression"
+                        },
+                        "PipelineTriggerTime": {
+                            "value": "@formatDateTime(pipeline().TriggerTime, 's')",
+                            "type": "Expression"
+                        },
+                        "PipelineTriggerName": {
+                            "value": "@pipeline().TriggerName",
+                            "type": "Expression"
+                        },
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "112-pipeZZZMetadataMaster",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeZZZMetadataMaster",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "702-pipeModelRefreshers",
+                "description": "Runs refreshment of data models that are reliant of data from previous data pipelines, e.g. Analysis Services cubes and PowerBI models with import mode.",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "701-pipeZZZEditionDailySnapshotMaster",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeModelRefreshers",
+                        "type": "PipelineReference"
+                    },
+                    "parameters": {
+                        "Datasets": {
+                            "value": "[\n   \"ed37a02d-c9b3-4f4b-b522-a3081fc5d2e1\",\n   \"7cf47e8e-a69b-42f3-acc0-5326c80fbb16\",\n   \"ba21e148-4530-457c-b557-3c8f9ac40e77\",\n   \"caf9561a-8179-433f-8c5c-fe96717364af\",\n   \"f43229c3-ce89-49ce-b701-1d91b161844e\",\n   \"6cac279d-b1c6-45c9-927a-161611dc5e4d\",\n   \"5e60d4a1-8016-4a4a-9be0-d6711759c501\"\n]\n",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "WindowStart": {
+                "type": "String"
+            },
+            "WindowEnd": {
+                "type": "String"
+            }
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

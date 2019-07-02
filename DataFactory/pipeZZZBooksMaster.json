@@ -1,0 +1,464 @@
+{
+    "name": "pipeZZZBooksMaster",
+    "properties": {
+        "activities": [
+            {
+                "name": "101-pipeBooksEditionContributors",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksEditionContributorsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "102-pipeBooksContributors",
+                "type": "ExecutePipeline",
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksContributorsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "103-pipeBooksBooks",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "102-pipeBooksContributors",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksBooksSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "104-pipeBooksEditions",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "103-pipeBooksBooks",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksEditionsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "105-pipeBooksGenreBooks",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "104-pipeBooksEditions",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksGenreBooksSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "106-pipeBooksGenres",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "105-pipeBooksGenreBooks",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksGenresSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "107-pipeBooksGenreTranslations",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "106-pipeBooksGenres",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksGenreTranslationsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "108-pipeBooksMergedBooks",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "107-pipeBooksGenreTranslations",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksMergedBooksSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "109-pipeBooksSeriesParts",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "110-pipeBooksSeries",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksSeriesPartsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "110-pipeBooksSeries",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "108-pipeBooksMergedBooks",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksSeriesSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "111-pipeBooksTagBooks",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "109-pipeBooksSeriesParts",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksTagBooksSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "112-pipeBooksTagGroups",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "111-pipeBooksTagBooks",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksTagGroupsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "113-pipeBooksTagGroupTags",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "112-pipeBooksTagGroups",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksTagGroupTagsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "114-pipeBooksTags",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "113-pipeBooksTagGroupTags",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksTagsSQLToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "201-pipeDefineAllContributors",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "101-pipeBooksEditionContributors",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "102-pipeBooksContributors",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeDefineAllContributorsSQLDWStoredProc",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": {
+                            "value": "@pipeline().parameters.WindowStart",
+                            "type": "Expression"
+                        },
+                        "WindowEnd": {
+                            "value": "@pipeline().parameters.WindowEnd",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "115-pipeBooksBookViewModels",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "114-pipeBooksTags",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "pipeBooksBookViewModelsCosmosDBToSQLDWViaADL",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "WindowStart": "@pipeline().parameters.WindowStart",
+                        "WindowEnd": "@pipeline().parameters.WindowEnd"
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "WindowStart": {
+                "type": "String"
+            },
+            "WindowEnd": {
+                "type": "String"
+            }
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

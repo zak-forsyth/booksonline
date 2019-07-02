@@ -1,0 +1,9 @@
+﻿{
+    "name": "lsProdbbSQLBBBooks",
+    "properties": {
+        "type": "AzureSqlDatabase",
+        "typeProperties": {
+            "connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=test-bb.database.windows.net;initial catalog=BB.Books;user id=test-sqladmin;Password=password"
+        }
+    }
+}
