@@ -1,0 +1,69 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "PrimaryStorageAccountName": {
+      "value": "config:PrimaryStorageAccountName"
+    },
+    "PrimaryStorageAccountKey": {
+      "value": "config:PrimaryStorageAccountKey"
+    },
+    "immersionScriptModuleFileLink": {
+      "value": "blob:platform/20170215/Immersion.psm1"
+    },
+    "configureJumphostScriptFileLink": {
+      "value": "asset:scripts/ConfigureJumpHost.ps1"
+    },
+    "postRebootScriptFileLink": {
+      "value": "asset:scripts/PostReboot.ps1"
+    },
+    "win10userScriptFileLink": {
+      "value": "asset:scripts/win10user.ps1"
+    },
+    "BooksEditions-DailySnapshot-20190302.csv": {
+      "value": "asset:scripts/BooksEditions-DailySnapshot-20190302.csv"
+    },
+    "BooksEditions-DailySnapshot-Latest.orc": {
+      "value": "asset:scripts/BooksEditions-DailySnapshot-Latest.orc"
+    },
+    "RelatedReadingsPy.py": {
+      "value": "asset:scripts/RelatedReadingsPy.py"
+    },
+    "sql-bookbeats-2019-3-7-8-56.bacpac": {
+      "value": "asset:scripts/sql-bookbeats-2019-3-7-8-56.bacpac"
+    },
+    "UploadFileShareFiles.ps1": {
+      "value": "asset:scripts/UploadFileShareFiles.ps1"
+    },
+    "Booklistpopularity.pbix": {
+      "value": "asset:scripts/Booklistpopularity.pbix"
+    },
+    "vmLocalUserPassword": {
+      "value": "config:AzureAdPassword"
+    },
+    "AdminPassword": {
+      "value": "0b@bC6vVAGTz3$p1T"
+    },
+    "vmLocalUserEmail": {
+      "value": "config:AzureAdEmail"
+    },
+    "notDemo": {
+      "value": "false"
+    },
+    "skipWebProxyInstall": {
+      "value": "false"
+    },
+    "AzureSQLserverAdminLoginPassword": {
+      "value": "config:AzureAdPassword"
+    },
+    "AzureSQLDBIMPORTAdministratorLoginPassword": {
+      "value": "config:AzureAdPassword"
+    },
+    "lsProdbbSQLBBBooks_connectionString": {
+      "value": ""
+    },
+    "lsProdbbAzureDatabricksWorm_accessToken": {
+      "value": ""
+    }
+  }
+}
